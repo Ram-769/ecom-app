@@ -1,0 +1,16 @@
+{
+  "name": "e-com-app",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": ["client", "server", "packages/contracts"],
+  "engines": { "node": "^20.19.0 || ^22.12.0 || ^24.0.0" },
+  "scripts": {
+    "predev": "npm run build -w @ecom/contracts",
+    "dev": "concurrently -k -n api,web -c cyan,green \"npm run dev -w server\" \"npm start -w client\"",
+    "build": "npm run build -w @ecom/contracts && npm run build -w server && npm run build -w client",
+    "test": "npm run build -w @ecom/contracts && npm test -w server",
+    "start": "npm start -w server",
+    "seed": "npm run build -w @ecom/contracts && npm run seed -w server"
+  },
+  "devDependencies": { "concurrently": "^9.2.1" }
+}

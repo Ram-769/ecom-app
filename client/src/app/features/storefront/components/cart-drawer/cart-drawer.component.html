@@ -1,0 +1,42 @@
+<p-drawer [visible]="visible()" (visibleChange)="visibleChange.emit($event)" position="right" ariaCloseLabel="Close bag" [blockScroll]="true" [header]="'Your bag (' + cart.count() + ')'" [style]="{ width: 'min(100vw, 460px)' }">
+  @if (cart.items().length) {
+    <div class="shipping-note"><i class="pi pi-truck" aria-hidden="true"></i>@if (cart.freeShippingRemaining()) { <span>You're {{ cart.freeShippingRemaining() | money }} away from free shipping.</span> } @else { <span>Your bag ships for free. Nice choice.</span> }</div>
+    <div class="cart-items">
+      @for (item of cart.items(); track item.product.id) {
+        <article class="cart-item">
+          <img [src]="item.product.image" [alt]="item.product.imageAlt" [style.background]="item.product.color" width="88" height="88">
+          <div class="cart-item-info"><h3>{{ item.product.name }}</h3><span>{{ item.product.price | money }}</span>
+            <div class="quantity-row">
+              <div class="quantity-control"><button type="button" [attr.aria-label]="'Decrease ' + item.product.name + ' quantity'" [disabled]="item.quantity <= 1" (click)="cart.setQuantity(item.product, item.quantity - 1)"><i class="pi pi-minus" aria-hidden="true"></i></button><span aria-live="polite">{{ item.quantity }}</span><button type="button" [attr.aria-label]="'Increase ' + item.product.name + ' quantity'" [disabled]="item.quantity >= item.product.stock || item.quantity >= cart.maxQuantity" (click)="cart.setQuantity(item.product, item.quantity + 1)"><i class="pi pi-plus" aria-hidden="true"></i></button></div>
+              <button class="remove-button" type="button" [attr.aria-label]="'Remove ' + item.product.name" (click)="cart.remove(item.product.id)">Remove</button>
+            </div>
+            @if (item.quantity > item.product.stock) { <p class="error" role="alert">Only {{ item.product.stock }} available. Adjust your quantity.</p> }
+          </div>
+        </article>
+      }
+    </div>
+    <div class="totals"><div><span>Subtotal</span><span>{{ cart.subtotal() | money }}</span></div><div><span>Shipping</span><span>{{ cart.shipping() ? (cart.shipping() | money) : 'Free' }}</span></div><div class="total"><strong>Total</strong><strong>{{ cart.total() | money }}</strong></div></div>
+    <p-button label="Continue to checkout" icon="pi pi-arrow-right" iconPos="right" [fluid]="true" [disabled]="cart.invalidStock() || catalog.loading() || !!catalog.error()" (onClick)="openCheckout()" />
+    <p class="sample-note">Sample store · No payment will be collected.</p>
+  } @else {
+    <div class="empty-bag"><i class="pi pi-shopping-bag" aria-hidden="true"></i><h3>Good things belong here.</h3><p>Your bag is waiting for a little everyday upgrade.</p><p-button label="Explore the collection" (onClick)="visibleChange.emit(false)" /></div>
+  }
+</p-drawer>
+
+<p-dialog [visible]="checkoutVisible()" (visibleChange)="setCheckoutVisible($event)" [modal]="true" closeAriaLabel="Close checkout" [header]="confirmed() ? 'A good choice, confirmed.' : 'The final little details'" [style]="{ width: 'min(94vw, 510px)' }" [closable]="!submitting()" [closeOnEscape]="!submitting()" [draggable]="false">
+  @if (confirmed(); as order) {
+    <div class="order-success" role="status"><span class="success-icon"><i class="pi pi-check" aria-hidden="true"></i></span><h3>Thanks, {{ order.customer.name }}.</h3><p>Your sample order is confirmed.</p><div class="receipt"><span>Order reference</span><strong>{{ order.id.slice(0, 8).toUpperCase() }}</strong><span>Total</span><strong>{{ order.total | money }}</strong></div><p class="sample-note">This is a demo order. No payment, email, or shipment is created.</p><p-button label="Keep exploring" [fluid]="true" (onClick)="setCheckoutVisible(false)" /></div>
+  } @else {
+    <p class="checkout-intro">One step closer to your new everyday favorites.</p>
+    <div class="demo-notice"><i class="pi pi-info-circle" aria-hidden="true"></i><span>Sample checkout. Use test details. No payment or delivery.</span></div>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="checkout-form">
+      <div class="field"><label for="customer-name">Full name</label><input pInputText id="customer-name" formControlName="name" autocomplete="name" placeholder="Alex Morgan" maxlength="80" [attr.aria-invalid]="form.controls.name.touched && form.controls.name.invalid" aria-describedby="name-error">@if (form.controls.name.touched && form.controls.name.invalid) { <small id="name-error" class="error">Enter a name between 2 and 80 characters.</small> }</div>
+      <div class="field"><label for="customer-email">Email address</label><input pInputText id="customer-email" formControlName="email" type="email" autocomplete="email" placeholder="alex@example.com" maxlength="160" [attr.aria-invalid]="form.controls.email.touched && form.controls.email.invalid" aria-describedby="email-error">@if (form.controls.email.touched && form.controls.email.invalid) { <small id="email-error" class="error">Enter a valid email address.</small> }</div>
+      <div class="field"><label for="customer-address">Delivery address</label><textarea pTextarea id="customer-address" formControlName="address" autocomplete="street-address" placeholder="House, street, city and PIN code" rows="3" maxlength="400" [attr.aria-invalid]="form.controls.address.touched && form.controls.address.invalid" aria-describedby="address-error"></textarea>@if (form.controls.address.touched && form.controls.address.invalid) { <small id="address-error" class="error">Enter an address between 10 and 400 characters.</small> }</div>
+      <div class="checkout-total"><span>Order total <small>including shipping</small></span><strong>{{ cart.total() | money }}</strong></div>
+      @if (error()) { <p class="error error-box" role="alert">{{ error() }}</p> }
+      @if (cart.invalidStock()) { <p class="error" role="alert">Stock has changed. Close checkout and adjust your bag.</p> }
+      <p-button type="submit" label="Place sample order" icon="pi pi-arrow-right" iconPos="right" [fluid]="true" [loading]="submitting()" [disabled]="submitting() || cart.invalidStock() || !cart.count()" />
+    </form>
+  }
+</p-dialog>

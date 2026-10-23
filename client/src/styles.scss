@@ -1,0 +1,23 @@
+@import 'primeicons/primeicons.css';
+
+:root { color-scheme: light; --p-font-family: 'Segoe UI', Arial, sans-serif; --p-button-border-radius: 5px; --p-inputtext-border-radius: 5px; --p-select-border-radius: 5px; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #fafbf6; color: #293d30; font-family: 'Segoe UI', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible { outline: 2px solid #658452; outline-offset: 4px; }
+.icon-button { border: 0; background: transparent; display: inline-grid; place-items: center; cursor: pointer; }
+.skip-link { position: fixed; z-index: 9999; top: -60px; left: 12px; padding: 12px 20px; background: #173f35; color: white; border-radius: 4px; }
+.skip-link:focus { top: 10px; }
+.collection-controls .p-select { min-width: 132px; background: transparent; border-color: #dfe2d6; font-size: 10px; }
+.collection-controls .p-select-label { padding: 9px 12px; }
+.collection-controls .p-select-dropdown { width: 28px; }
+.collection-controls .p-select-dropdown svg { width: 10px; height: 10px; }
+.p-select-option { font-size: 12px; }
+.product-card .p-button { padding: 7px 10px; font-size: 10px; font-weight: 500; color: #455c42; border-color: #d8dece; background: transparent; gap: 5px; white-space: nowrap; }
+.product-card .p-button .pi { font-size: 9px; }
+.p-toast { max-width: calc(100vw - 30px); }
+.p-drawer-title, .p-dialog-title { font-family: Georgia, 'Times New Roman', serif; letter-spacing: -.03em; font-size: 25px; font-weight: 400; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *:before, *:after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }

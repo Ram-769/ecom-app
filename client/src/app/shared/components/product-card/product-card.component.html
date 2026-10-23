@@ -1,0 +1,18 @@
+<article class="product-card">
+  <div class="product-visual" [style.background]="product().color">
+    @if (product().badge) { <span class="product-badge" [class.new]="product().badge === 'NEW ARRIVAL'">{{ product().badge }}</span> }
+    <button class="favorite-button icon-button" type="button" [attr.aria-label]="(favorite() ? 'Unsave ' : 'Save ') + product().name" [attr.aria-pressed]="favorite()" (click)="toggleFavorite.emit(product().id)">
+      <i [class]="favorite() ? 'pi pi-heart-fill' : 'pi pi-heart'" aria-hidden="true"></i>
+    </button>
+    <img [src]="product().image" [alt]="product().imageAlt" width="360" height="300" loading="lazy">
+    @if (product().stock === 0) { <span class="sold-out">Currently out of stock</span> }
+  </div>
+  <div class="product-info">
+    <div class="meta"><span>{{ product().category }}</span><span class="rating"><i class="pi pi-star-fill" aria-hidden="true"></i> {{ product().rating }} <span>({{ product().reviews }})</span></span></div>
+    <h3>{{ product().name }}</h3>
+    <div class="product-bottom">
+      <div class="prices"><strong>{{ product().price | money }}</strong>@if (product().originalPrice) { <del>{{ product().originalPrice! | money }}</del> }</div>
+      <p-button [label]="product().stock ? 'Add to bag' : 'Sold out'" [icon]="product().stock ? 'pi pi-plus' : ''" size="small" severity="secondary" [outlined]="true" [disabled]="product().stock === 0" (onClick)="add.emit(product())" [ariaLabel]="'Add ' + product().name + ' to bag'" />
+    </div>
+  </div>
+</article>
