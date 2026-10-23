@@ -1,4 +1,3 @@
-export const API_BASE_URL = '/api';
 export const CART_STORAGE_KEY = 'forma.cart.v1';
 export const FAVORITES_STORAGE_KEY = 'forma.favorites.v1';
 export const SORT_OPTIONS = [

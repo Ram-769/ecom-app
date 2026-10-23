@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: forma-ecom-api
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: npm ci --include=dev && npm run build:server
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: TRUST_PROXY_HOPS
+        value: '1'
+      - key: DATA_MODE
+        value: mongodb
+      - key: MONGODB_DB
+        value: ecom_app
+      - key: MONGODB_URI
+        sync: false
+      - key: CLIENT_ORIGIN
+        sync: false

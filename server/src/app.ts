@@ -9,11 +9,16 @@ import { orderSchema } from './order.js';
 import { HttpError } from './errors.js';
 import type { StoreRepository } from './repositories/store.repository.js';
 
-interface AppOptions { readonly clientOrigin: string; readonly serveClient?: boolean; }
+interface AppOptions {
+  readonly clientOrigin: string;
+  readonly serveClient?: boolean;
+  readonly trustProxyHops?: number;
+}
 
 export function createApp(repository: StoreRepository, options: AppOptions) {
   const app = express();
   app.disable('x-powered-by');
+  app.set('trust proxy', options.trustProxyHops ?? 0);
   app.use(helmet({ contentSecurityPolicy: { directives: { 'script-src': ["'self'"], 'style-src': ["'self'", "'unsafe-inline'"], 'img-src': ["'self'", 'data:'] } } }));
   app.use(cors({ origin: options.clientOrigin, methods: ['GET', 'POST'], allowedHeaders: ['Content-Type', 'Idempotency-Key'] }));
   app.use(express.json({ limit: '16kb' }));

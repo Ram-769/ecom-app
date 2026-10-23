@@ -1,0 +1,15 @@
+[build]
+  base = "."
+  command = "npm run build:netlify"
+  publish = "client/dist/storefront/browser"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NPM_FLAGS = "--include=dev"
+
+# Set API_BASE_URL=https://<your-render-service>.onrender.com/api in Netlify.
+# API calls go directly to Render; they do not share Netlify's proxy timeout.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -11,9 +11,13 @@ async function main(): Promise<void> {
     try { await mongo.connect(); } catch { await mongo.close(); throw new Error('Atlas connection failed. Check database credentials and the Atlas IP access list.'); }
     repository = mongo;
   } else { repository = new MemoryRepository(); }
-  const app = createApp(repository, { clientOrigin: configValues.CLIENT_ORIGIN, serveClient: configValues.NODE_ENV === 'production' });
-  const server = app.listen(configValues.PORT, '127.0.0.1', () => {
-    console.log(`Store API: http://localhost:${configValues.PORT} (${repository.mode})`);
+  const app = createApp(repository, {
+    clientOrigin: configValues.CLIENT_ORIGIN,
+    trustProxyHops: configValues.TRUST_PROXY_HOPS,
+    serveClient: configValues.NODE_ENV === 'production',
+  });
+  const server = app.listen(configValues.PORT, configValues.HOST, () => {
+    console.log(`Store API listening on ${configValues.HOST}:${configValues.PORT} (${repository.mode})`);
   });
   const shutdown = (): void => {
     server.close(() => { void repository.close().finally(() => process.exit(0)); });

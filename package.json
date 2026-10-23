@@ -8,7 +8,10 @@
     "predev": "npm run build -w @ecom/contracts",
     "dev": "concurrently -k -n api,web -c cyan,green \"npm run dev -w server\" \"npm start -w client\"",
     "build": "npm run build -w @ecom/contracts && npm run build -w server && npm run build -w client",
-    "test": "npm run build -w @ecom/contracts && npm test -w server",
+    "build:server": "npm run build -w @ecom/contracts && npm run build -w server",
+    "build:client": "npm run build -w @ecom/contracts && npm run build -w client",
+    "build:netlify": "npm run build:client && node scripts/configure-netlify.mjs",
+    "test": "npm run build -w @ecom/contracts && npm test -w server && node --test scripts/test/deployment.test.mjs",
     "start": "npm start -w server",
     "seed": "npm run build -w @ecom/contracts && npm run seed -w server"
   },

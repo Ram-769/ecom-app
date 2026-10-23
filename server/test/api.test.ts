@@ -85,3 +85,16 @@ test('malformed JSON and unknown API routes return consistent JSON errors', asyn
   const response = await request(app()).get('/api/missing').expect(404);
   assert.equal((response.body as { code: string }).code, 'NOT_FOUND');
 });
+
+test('hosted frontend can preflight checkout with its idempotency header', async () => {
+  const origin = 'https://forma-sample.netlify.app';
+  const deployedApp = createApp(repository, { clientOrigin: origin, trustProxyHops: 1 });
+  const response = await request(deployedApp).options('/api/orders')
+    .set('Origin', origin)
+    .set('Access-Control-Request-Method', 'POST')
+    .set('Access-Control-Request-Headers', 'content-type,idempotency-key').expect(204);
+  assert.equal(response.headers['access-control-allow-origin'], origin);
+  assert.match(String(response.headers['access-control-allow-headers']).toLowerCase(), /idempotency-key/);
+  const untrusted = await request(deployedApp).get('/api/products').set('Origin', 'https://other.example').expect(200);
+  assert.notEqual(untrusted.headers['access-control-allow-origin'], 'https://other.example');
+});

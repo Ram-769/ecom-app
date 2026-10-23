@@ -6,6 +6,8 @@ import { isIP } from 'node:net';
 config({ path: new URL('../../.env', import.meta.url), quiet: true });
 const environment = z.object({
   PORT: z.coerce.number().int().min(1).max(65535).default(4000),
+  HOST: z.string().refine(value => isIP(value) !== 0 || value === 'localhost').default('127.0.0.1'),
+  TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(5).default(0),
   DATA_MODE: z.enum(['demo', 'mongodb']).default('demo'),
   MONGODB_URI: z.string().optional(),
   MONGODB_DB: z.string().regex(/^[a-zA-Z0-9_-]+$/).default('ecom_app'),

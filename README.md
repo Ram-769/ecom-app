@@ -75,3 +75,7 @@ All totals are calculated by the server. Quantities are limited to 10 per produc
 This is a sample storefront. Checkout uses **test customer details**, saves a `sample-confirmed` order, and does not charge, email, or ship anything. The service promises, ratings, and review counts are illustrative sample content. Real commerce would require authentication/authorization, payment integration, taxes, fulfillment, privacy/retention controls, and operational hardening appropriate to deployment.
 
 CI runs the API suite and builds all workspaces without requiring Atlas credentials. `.env`, dependencies, and build outputs are excluded from Git.
+
+## Deploy to Netlify and Render
+
+The repository includes `netlify.toml` and `render.yaml` for separate frontend and API hosting. Follow [DEPLOYMENT.md](DEPLOYMENT.md) for the exact build commands, environment variables, Atlas access, and deployment checks. The production frontend reads its HTTPS API endpoint from a generated public `app-config.json`; MongoDB credentials belong only in Render's secret environment variables.

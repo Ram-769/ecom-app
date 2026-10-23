@@ -1,4 +1,4 @@
-import { type ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { type ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
@@ -6,6 +6,7 @@ import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 import { MessageService } from 'primeng/api';
 import { routes } from './app.routes';
+import { RuntimeConfigService } from './core/services/runtime-config.service';
 
 const FormaPreset = definePreset(Aura, {
   semantic: {
@@ -16,6 +17,7 @@ const FormaPreset = definePreset(Aura, {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(), provideZonelessChangeDetection(), provideHttpClient(), provideRouter(routes),
+    provideAppInitializer(() => inject(RuntimeConfigService).load()),
     providePrimeNG({ theme: { preset: FormaPreset, options: { darkModeSelector: false, cssLayer: false } }, ripple: true }),
     MessageService,
   ],
