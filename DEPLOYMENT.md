@@ -2,6 +2,16 @@
 
 Source repository: https://github.com/Ram-769/ecom-app
 
+## Hosted endpoints
+
+| Component | Address | Region |
+| --- | --- | --- |
+| Angular frontend | https://forma-ecom-ram-769.netlify.app | Netlify global CDN |
+| Node API | https://forma-ecom-ram-769-api.onrender.com/api | Render Singapore |
+| MongoDB Atlas | `Cluster0`, database `ecom_app` | AWS Mumbai, India (`ap-south-1`) |
+
+The Atlas access list includes the approved Render Singapore outbound ranges `74.220.52.0/24` and `74.220.60.0/24`. These are shared provider ranges, and database authentication remains required. If Render changes the service's outbound addresses, review and update those Atlas entries.
+
 ## Git
 
 Git is already initialized on `main` and points to the repository above. From the repository root:

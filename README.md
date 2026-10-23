@@ -2,6 +2,8 @@
 
 A responsive Angular + PrimeNG storefront with a typed Node/Express API and MongoDB Atlas persistence. Browse eight locally illustrated products, search, filter, sort, save favorites, manage a persistent bag, and place a sample order without leaving the page.
 
+Frontend: https://forma-ecom-ram-769.netlify.app · API: https://forma-ecom-ram-769-api.onrender.com/api
+
 ## Run locally
 
 Use Node.js 20.19+ (20.x), 22.12+ (22.x), or 24.x and npm. Angular 21 is selected to support the installed Node 20 runtime.
