@@ -74,6 +74,8 @@ The build writes `app-config.json` and security headers into the output director
 
 Netlify's Angular runtime validates output relative to the Angular workspace, so its base directory is `client`. `NPM_FLAGS=--prefix=.. --include=dev` installs dependencies from the repository's root lockfile, and the build command runs the root workspace scripts.
 
+Production builds disable Angular's critical CSS inlining so stylesheet loading works with the generated Content Security Policy. This avoids Angular's inline `onload` stylesheet handler, which a `script-src 'self'` policy correctly blocks.
+
 When Netlify assigns the project URL, set Render's `CLIENT_ORIGIN` to that exact origin and redeploy the API. If either hostname changes, update the corresponding environment variable and redeploy the affected service.
 
 To create a local deployable frontend artifact after building:
