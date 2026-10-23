@@ -52,15 +52,17 @@ Import the same repository as a Netlify project. The root `netlify.toml` configu
 
 | Setting | Value |
 | --- | --- |
-| Base directory | Repository root (`.`) |
+| Base directory | `client` (the Angular workspace) |
 | Branch | `main` |
-| Build command | `npm run build:netlify` |
-| Publish directory | `client/dist/storefront/browser` |
+| Build command | `npm --prefix .. run build:netlify` |
+| Publish directory | `dist/storefront/browser`, relative to `client` |
 | Node version | `22` |
 
 Add the build environment variable **`API_BASE_URL=https://your-render-service.onrender.com/api`**. Use the actual Render URL; the build rejects missing or insecure URLs. This URL is public configuration, not a secret. Never add `MONGODB_URI` to Netlify or Angular.
 
 The build writes `app-config.json` and security headers into the output directory. The Angular application loads that configuration before creating API services. Requests go directly to Render with CORS configured for the Netlify origin. The `netlify.toml` rewrite serves Angular's entry page for client routes while retaining real static assets.
+
+Netlify's Angular runtime validates output relative to the Angular workspace, so its base directory is `client`. `NPM_FLAGS=--prefix=.. --include=dev` installs dependencies from the repository's root lockfile, and the build command runs the root workspace scripts.
 
 When Netlify assigns the project URL, set Render's `CLIENT_ORIGIN` to that exact origin and redeploy the API. If either hostname changes, update the corresponding environment variable and redeploy the affected service.
 

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: forma-ecom-api
+    name: forma-ecom-ram-769-api
     runtime: node
     plan: free
     region: singapore
